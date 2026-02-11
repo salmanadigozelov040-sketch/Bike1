@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIKE.SHOP.AZ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #000;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 70px; 
+        }
+
+        .header-logo img { height: 55px; width: auto; display: block; }
+        
+        .header-title { 
+            font-size: 1rem; 
+            font-weight: bold; 
+            letter-spacing: 1px; 
+            position: absolute; 
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        .menu-icon { font-size: 1.8rem; cursor: pointer; }
+
+        .search-container {
+            position: sticky;
+            top: 70px; 
+            background-color: #000;
+            padding: 5px 15px 15px 15px;
+            z-index: 99;
+            border-bottom: 1px solid #222;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background-color: #1a1a1a;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            box-sizing: border-box; 
+        }
+
+        #main-menu {
+            display: none;
+            background-color: #111;
+            position: fixed;
+            top: 70px;
+            width: 100%;
+            z-index: 200;
+            border-bottom: 1px solid #333;
+        }
+
+        .menu-item {
+            display: flex; align-items: center; padding: 15px 20px;
+            color: white; text-decoration: none; border-bottom: 1px solid #222; font-size: 1.1rem;
+        }
+
+        .menu-item i { margin-right: 15px; width: 25px; text-align: center; color: #bbb; }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+
+        .product-card { background-color: #000; margin-bottom: 10px; position: relative; }
+
+        .image-container {
+            width: 100%; 
+            aspect-ratio: 1/1; 
+            background-color: #111;
+            overflow: hidden; 
+            position: relative; 
+            border-radius: 6px;
+        }
+
+        .product-image { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block;
+        }
+        
+        .card-info-row { display: flex; justify-content: space-between; padding: 10px 5px; align-items: center; }
+        .grid-price { font-size: 1.1rem; font-weight: bold; color: #fff; }
+        .heart-icon { font-size: 1.4rem; color: #666; cursor: pointer; padding: 5px; z-index: 10; }
+        .heart-icon.active { color: #ff0000 !important; }
+
+        .load-more-container {
+            text-align: center;
+            padding: 20px 0 40px 0;
+        }
+
+        .load-more-btn {
+            background-color: transparent;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        footer {
+            border-top: 1px solid #222;
+            padding: 40px 20px;
+            text-align: center;
+            background-color: #000;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 1.8rem;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-text {
+            color: #555;
+            font-size: 0.8rem;
+        }
+
+        .modal {
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background-color: #000; 
+            z-index: 1000; 
+            overflow-y: auto;
+            flex-direction: column;
+        }
+
+        .modal-top-bar { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px 20px; 
+            background: #000;
+            position: sticky;
+            top: 0;
+            z-index: 1001;
+        }
+
+        .close-btn { font-size: 2rem; cursor: pointer; color: #fff; }
+        .modal-logo img { height: 40px; }
+
+        .slider-wrapper {
+            position: relative; 
+            width: 100%; 
+            aspect-ratio: 1/1;
+            background-color: #111; 
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .modal-image { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            display: block; 
+        }
+
+        .image-counter {
+            position: absolute; top: 15px; right: 15px; background-color: rgba(0,0,0,0.6); 
+            color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; 
+            z-index: 10;
+        }
+
+        .modal-content { padding: 20px; background-color: #000; }
+        .modal-name { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; font-style: italic; }
+        .modal-details { color: #ccc; margin-bottom: 30px; font-size: 1.1rem; line-height: 1.6; white-space: pre-line; }
+
+        .order-btn {
+            background-color: #666; 
+            color: white; 
+            text-align: center;
+            padding: 18px; 
+            border-radius: 50px; 
+            text-decoration: none;
+            font-weight: bold; 
+            display: block; 
+            font-size: 1.2rem; 
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        .no-result { grid-column: 1 / -1; text-align: center; padding: 40px; color: #666; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-logo">
+            <img src="https://i.ibb.co/3yZW23jr/file-00000000175c722fb281a93f97e3f54f.png" alt="Logo">
+        </div>
+        <div class="header-title">BIKE.SHOP.AZ</div>
+        <div class="menu-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Məhsul axtar...">
+    </div>
+
+    <nav id="main-menu">
+        <a href="#" class="menu-item" onclick="showPage('home')"><i class="fas fa-home"></i> Əsas səhifə</a>
+        <a href="https://wa.me/994552345510" class="menu-item"><i class="fab fa-whatsapp"></i> Əlaqə saxla</a>
+        <a href="#" class="menu-item" onclick="showPage('wishlist')"><i class="fas fa-heart"></i> İstək siyahım</a>
+    </nav>
+
+    <div class="product-grid" id="product-container"></div>
+
+    <div id="load-more-container" class="load-more-container">
+        <button class="load-more-btn" onclick="loadMore()">DAHA ÇOX GÖSTƏR</button>
+    </div>
+
+    <footer>
+        <div class="social-links">
+            <a href="https://www.instagram.com/bike.shop.az?igsh=Nm14MXJ0OW14MzFh" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://wa.me/994552345510" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="mailto:bikeshopaz1@gmail.com"><i class="far fa-envelope"></i></a>
+        </div>
+        <div class="footer-text">© 2026 BIKE.SHOP.AZ - Bütün hüquqlar qorunur.</div>
+    </footer>
+
+    <div id="product-modal" class="modal">
+        <div class="modal-top-bar">
+            <div class="close-btn" onclick="closeModal()">&times;</div>
+            <div class="modal-logo">
+                <img src="https://i.ibb.co/3yZW23jr/file-00000000175c722fb281a93f97e3f54f.png" alt="Logo">
+            </div>
+        </div>
+        
+        <div class="slider-wrapper" id="swipe-area">
+            <div class="image-counter" id="img-counter">1 / 2</div>
+            <img id="modal-img" src="" class="modal-image">
+        </div>
+
+        <div class="modal-content">
+            <div id="modal-name" class="modal-name"></div>
+            <div id="modal-details" class="modal-details"></div>
+            <a id="modal-whatsapp-btn" href="#" class="order-btn">İNDİ SİFARİŞ ET</a>
+        </div>
+    </div>
+
+    <script>
+        const whatsappNumber = "994552345510";
+        let currentPage = 'home';
+        let wishlist = JSON.parse(localStorage.getItem('bikeShopWishlist')) || [];
+        let visibleCount = 6;
+        let currentFilteredProducts = [];
+
+        const products = [
+            { 
+                id: 108, 
+                name: "Shimano Deore CS-M5100 Kaset", 
+                price: 139.00, 
+                images: ["https://i.ibb.co/GfrSz5Dj/Screenshot-20260212-013025-Instagram.jpg"], 
+                details: "Made in Japan 🇯🇵\nBrend: Shimano\nModel: CS-M5100 (Deore seriyası)\nSürət sayı: 11 Sürət (1x11 və ya 2x11)\nMaterial: Paslanmaz Polad (Nickel plated)\nBaraban növü: Standart Shimano HG\nDiş ardıcıllığı: 11-13-15-18-21-24-28-33-39-45-51T\nÇəki: ~622 qram\nÇatdırılma var ✅" 
+            },
+            { 
+                id: 107, 
+                name: "GHOST Seatpost", 
+                price: 25.00, 
+                images: ["https://i.ibb.co/JwK7bfg2/Screenshot-20260212-012423-Instagram.jpg", "https://i.ibb.co/zTJrkNh7/Screenshot-20260212-012417-Instagram.jpg"], 
+                details: "Made in Almaniya 🇩🇪\nMarka: Ghost\nUzunluq: 400mm\nDiametr: 31.6mm\nMaterial: Aluminum\nÇatdırılma var ✅" 
+            },
+            { 
+                id: 106, 
+                name: "GHOST GND 51 Sükan", 
+                price: 39.00, 
+                images: ["https://i.ibb.co/dwGkZwgD/Screenshot-20260212-005109-Instagram.jpg", "https://i.ibb.co/7D6D70r/Screenshot-20260212-005009-Instagram.jpg"], 
+                details: "Made in Almaniya 🇩🇪\nMarka: Ghost\nModel: GND 51\nMaterial: 6061 Alüminium\nUzunluq: 780mm\nRise: 15mm\nBacksweep: 8°\nUpsweep: 5°\nDiametr: 31.8mm\nÇəki: 299q\nÇatdırılma var ✅" 
+            },
+            { 
+                id: 105, 
+                name: "Brigadier VZR MTB Helmet", 
+                price: 39.00, 
+                images: ["https://i.ibb.co/fzrCt8hJ/Screenshot-20260212-003526-Instagram.jpg", "https://i.ibb.co/Q7sJwg4t/Screenshot-20260212-003637-Instagram.jpg"], 
+                details: "Marka: Brigadier\nModel: VZR\nNöv: Trail, XC, Street, Urban\nÖlçü: M - L\nRəng: Qara, Yaşıl\nQiymət: Endirimlə 39 AZN\nÇatdırılma var" 
+            },
+            { 
+                id: 104, 
+                name: "Reverse Components Saddle", 
+                price: 49.00, 
+                images: ["https://i.ibb.co/9mwB4wRn/Screenshot-20260212-002225-Wink.jpg", "https://i.ibb.co/XfWT9Yd1/quality-restoration-20260212002033230.jpg"], 
+                details: "Marka: Reverse Components\nMTB Yəhər\nÇəkisi: 238q\nÖlçü: 275×130mm\nRəng: Qara və qırmızı\nÇatdırılma var" 
+            },
+            { 
+                id: 103, 
+                name: "Cube Flat Pedal", 
+                price: 99.00, 
+                images: ["https://i.ibb.co/7dmyVg1m/Screenshot-20260211-231200-Instagram.jpg", "https://i.ibb.co/C5K74QKq/Screenshot-20260211-231243-Instagram.jpg"], 
+                details: "Made in Almaniya\nMarka: Cube\nMaterial: Aluminum\nÇəkisi: 366g\nRəng: Açıq yaşıl\nÖlçüsü: 105x95x17mm\nMəhdud saydadır\nÇatdırılma var" 
+            },
+            { 
+                id: 102, 
+                name: "Fullface Dəbilqə", 
+                price: 139.00, 
+                images: ["https://i.ibb.co/NPcQ5v3/Screenshot-20260211-225632-Instagram.jpg", "https://i.ibb.co/KpXd8x7v/Screenshot-20260211-225621-Instagram.jpg"], 
+                details: "Çəki: 1420q\nRəng: Qara yaşıl\nÖlçü: M,L\nÇox az işlənib\nBrend maldır, çox keyfiyyətlidir.\nÇatdırılma var." 
+            },
+            { 
+                id: 101, 
+                name: "Velosiped Tutacağı (Grip)", 
+                price: 10.00, 
+                images: ["https://i.ibb.co/bRKRFsvg/Screenshot-20260211-213641-Instagram.jpg", "https://i.ibb.co/WWtczntK/Screenshot-20260211-213629-Instagram.jpg"], 
+                details: "Made in China\n135mm\nÇatdırılma var\nQırmızı və Bənövşəyi rəngi mövcuddur" 
+            }
+        ];
+
+        function renderProducts(list, append = false) {
+            const container = document.getElementById('product-container');
+            const loadMoreBtn = document.getElementById('load-more-container');
+            if (!append) container.innerHTML = "";
+            currentFilteredProducts = list;
+            const itemsToShow = list.slice(0, visibleCount);
+            container.innerHTML = ""; 
+            if (itemsToShow.length === 0) {
+                container.innerHTML = "<div class='no-result'>Məhsul tapılmadı.</div>";
+                loadMoreBtn.style.display = 'none';
+                return;
+            }
+            itemsToShow.forEach(p => {
+                const isLiked = wishlist.includes(p.id);
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="image-container" onclick="openModal(${p.id})">
+                        <img src="${p.images[0]}" class="product-image">
+                    </div>
+                    <div class="card-info-row">
+                        <span class="grid-price">${p.price.toFixed(2)} AZN</span>
+                        <i class="${isLiked ? 'fas active' : 'far'} fa-heart heart-icon" data-id="${p.id}"></i>
+                    </div>
+                `;
+                card.querySelector('.heart-icon').addEventListener('click', (e) => toggleHeart(e, p.id));
+                container.appendChild(card);
+            });
+            loadMoreBtn.style.display = (visibleCount < list.length) ? 'block' : 'none';
+        }
+
+        function loadMore() {
+            visibleCount += 6;
+            renderProducts(currentFilteredProducts);
+        }
+
+        function toggleHeart(e, id) {
+            e.stopPropagation();
+            const idx = wishlist.indexOf(id);
+            if (idx > -1) wishlist.splice(idx, 1);
+            else wishlist.push(id);
+            localStorage.setItem('bikeShopWishlist', JSON.stringify(wishlist));
+            if (currentPage === 'wishlist') showPage('wishlist');
+            else {
+                e.target.classList.toggle('fas');
+                e.target.classList.toggle('far');
+                e.target.classList.toggle('active');
+            }
+        }
+
+        function showPage(page) {
+            currentPage = page;
+            visibleCount = 6;
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('searchInput').value = "";
+            if (page === 'home') renderProducts(products);
+            else renderProducts(products.filter(p => wishlist.includes(p.id)));
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('main-menu');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const text = e.target.value.toLowerCase();
+            visibleCount = 6;
+            const filtered = products.filter(p => p.name.toLowerCase().includes(text));
+            renderProducts(filtered);
+        });
+
+        let currentProduct = null, currentImageIndex = 0;
+        function openModal(id) {
+            currentProduct = products.find(x => x.id === id);
+            currentImageIndex = 0;
+            updateSlider();
+            document.getElementById('modal-name').innerText = currentProduct.name;
+            document.getElementById('modal-details').innerText = currentProduct.details;
+            const msg = `Salam! ${currentProduct.name} sifariş etmək istəyirəm.`;
+            document.getElementById('modal-whatsapp-btn').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
+            const modal = document.getElementById('product-modal');
+            modal.style.display = 'flex';
+            modal.scrollTop = 0;
+        }
+
+        function updateSlider() {
+            document.getElementById('modal-img').src = currentProduct.images[currentImageIndex];
+            document.getElementById('img-counter').innerText = `${currentImageIndex + 1} / ${currentProduct.images.length}`;
+            document.getElementById('img-counter').style.display = currentProduct.images.length > 1 ? 'block' : 'none';
+        }
+
+        function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
+
+        let touchStartX = 0;
+        const swipeArea = document.getElementById('swipe-area');
+        swipeArea.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive: true});
+        swipeArea.addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].screenX;
+            if (touchEndX < touchStartX - 50) { 
+                currentImageIndex = (currentImageIndex + 1) % currentProduct.images.length;
+                updateSlider();
+            } else if (touchEndX > touchStartX + 50) { 
+                currentImageIndex = (currentImageIndex - 1 + currentProduct.images.length) % currentProduct.images.length;
+                updateSlider();
+            }
+        }, {passive: true});
+
+        window.onclick = e => { if (e.target == document.getElementById('product-modal')) closeModal(); }
+
+        renderProducts(products);
+    </script>
+</body>
+</html>
