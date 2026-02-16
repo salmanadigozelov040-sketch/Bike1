@@ -1,460 +1,1450 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIKE.SHOP.AZ</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="description" content="Mast Coffee - Premium specialty coffee in Toronto. Ethically sourced, expertly crafted since 2017.">
+    <title>Mast Coffee | Premium Specialty Coffee in Toronto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #000000;
-            color: #ffffff;
+        /* --- GOOGLE FONTS --- */
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        /* --- CSS VARIABLES --- */
+        :root {
+            --cream: #F5F1E8;
+            --dark-brown: #2C1810;
+            --medium-brown: #5C3D2E;
+            --light-brown: #8B7355;
+            --gold: #C9A96E;
+            --white: #FFFFFF;
+            --black: #0A0A0A;
+            --gray: #6B6B6B;
+            --light-gray: #E8E4DC;
+            
+            --header-height: 90px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* --- RESET & BASIC STYLES --- */
+        * {
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
+            box-sizing: border-box;
         }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #000;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            height: 70px; 
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
         }
 
-        .header-logo img { height: 55px; width: auto; display: block; }
-        
-        .header-title { 
-            font-size: 1rem; 
-            font-weight: bold; 
-            letter-spacing: 1px; 
-            position: absolute; 
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-        }
-
-        .menu-icon { font-size: 1.8rem; cursor: pointer; }
-
-        .search-container {
-            position: sticky;
-            top: 70px; 
-            background-color: #000;
-            padding: 5px 15px 15px 15px;
-            z-index: 99;
-            border-bottom: 1px solid #222;
-        }
-
-        .search-input {
+        /* DÜZƏLİŞ: html və body üçün overflow-x: hidden əlavə edildi */
+        html, body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--dark-brown);
+            line-height: 1.7;
+            background-color: var(--cream);
             width: 100%;
-            padding: 12px 15px;
-            border-radius: 10px;
-            border: 1px solid #333;
-            background-color: #1a1a1a;
-            color: white;
+            overflow-x: hidden; /* Əsas düzəliş buradadır */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            line-height: 1.2;
+            color: var(--dark-brown);
+        }
+
+        h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+
+        p {
             font-size: 1rem;
-            outline: none;
-            box-sizing: border-box; 
+            line-height: 1.8;
+            color: var(--gray);
+            margin-bottom: 1.25rem;
         }
 
-        #main-menu {
-            display: none;
-            background-color: #111;
-            position: fixed;
-            top: 70px;
-            width: 100%;
-            z-index: 200;
-            border-bottom: 1px solid #333;
-        }
-
-        .menu-item {
-            display: flex; align-items: center; padding: 15px 20px;
-            color: white; text-decoration: none; border-bottom: 1px solid #222; font-size: 1.1rem;
-        }
-
-        .menu-item i { margin-right: 15px; width: 25px; text-align: center; color: #bbb; }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            padding: 15px;
+        /* --- UTILITY CLASSES --- */
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 0 clamp(1.25rem, 5vw, 5rem);
         }
 
-        .product-card { background-color: #000; margin-bottom: 10px; position: relative; }
-
-        .image-container {
-            width: 100%; 
-            aspect-ratio: 1/1; 
-            background-color: #111;
-            overflow: hidden; 
-            position: relative; 
-            border-radius: 6px;
+        .section {
+            padding: clamp(4rem, 10vw, 8rem) 0;
         }
 
-        .product-image { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            display: block;
-        }
-        
-        .card-info-row { display: flex; justify-content: space-between; padding: 10px 5px; align-items: center; }
-        .grid-price { font-size: 1.1rem; font-weight: bold; color: #fff; }
-        .heart-icon { font-size: 1.4rem; color: #666; cursor: pointer; padding: 5px; z-index: 10; }
-        .heart-icon.active { color: #ff0000 !important; }
-
-        .load-more-container {
-            text-align: center;
-            padding: 20px 0 40px 0;
+        .section-dark {
+            background-color: var(--dark-brown);
+            color: var(--cream);
         }
 
-        .load-more-btn {
-            background-color: transparent;
-            color: #fff;
-            border: 1px solid #444;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+        .section-dark h2,
+        .section-dark h3 {
+            color: var(--cream);
         }
 
-        footer {
-            border-top: 1px solid #222;
-            padding: 40px 20px;
-            text-align: center;
-            background-color: #000;
+        .section-dark p {
+            color: rgba(245, 241, 232, 0.8);
         }
 
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 20px;
-        }
-
-        .social-links a {
-            color: #fff;
-            font-size: 1.8rem;
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             text-decoration: none;
-            transition: color 0.3s;
+            border: 2px solid;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
         }
 
-        .footer-text {
-            color: #555;
-            font-size: 0.8rem;
-        }
-
-        .modal {
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%;
-            background-color: #000; 
-            z-index: 1000; 
-            overflow-y: auto;
-            flex-direction: column;
-        }
-
-        .modal-top-bar { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 15px 20px; 
-            background: #000;
-            position: sticky;
+        .btn::before {
+            content: '';
+            position: absolute;
             top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            left: 0;
+        }
+
+        .btn-primary {
+            background-color: var(--dark-brown);
+            color: var(--cream);
+            border-color: var(--dark-brown);
+        }
+
+        .btn-primary::before {
+            background-color: var(--medium-brown);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--dark-brown);
+            border-color: var(--dark-brown);
+        }
+
+        .btn-secondary::before {
+            background-color: var(--dark-brown);
+        }
+
+        .btn-secondary:hover {
+            color: var(--cream);
+        }
+
+        .btn-light {
+            background-color: var(--cream);
+            color: var(--dark-brown);
+            border-color: var(--cream);
+        }
+
+        .btn-light::before {
+            background-color: var(--gold);
+        }
+
+        .btn-outline-light {
+            background-color: transparent;
+            color: var(--cream);
+            border-color: var(--cream);
+        }
+
+        .btn-outline-light::before {
+            background-color: var(--cream);
+        }
+
+        .btn-outline-light:hover {
+            color: var(--dark-brown);
+        }
+
+        /* --- HEADER --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background-color: rgba(245, 241, 232, 0.98);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(44, 24, 16, 0.08);
+            box-shadow: 0 1px 20px rgba(0, 0, 0, 0.04);
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            height: 75px;
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 clamp(1.25rem, 5vw, 5rem);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
             z-index: 1001;
         }
 
-        .close-btn { font-size: 2rem; cursor: pointer; color: #fff; }
-        .modal-logo img { height: 40px; }
-
-        .slider-wrapper {
-            position: relative; 
-            width: 100%; 
-            aspect-ratio: 1/1;
-            background-color: #111; 
-            overflow: hidden;
-            flex-shrink: 0;
+        .header-logo img {
+            height: 55px;
+            width: auto;
+            transition: var(--transition);
         }
 
-        .modal-image { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            display: block; 
+        header.scrolled .header-logo img {
+            height: 45px;
         }
 
-        .image-counter {
-            position: absolute; top: 15px; right: 15px; background-color: rgba(0,0,0,0.6); 
-            color: white; padding: 6px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; 
-            z-index: 10;
-        }
-
-        .modal-content { padding: 20px; background-color: #000; }
-        .modal-name { font-size: 1.6rem; font-weight: bold; margin-bottom: 10px; font-style: italic; }
-        .modal-details { color: #ccc; margin-bottom: 30px; font-size: 1.1rem; line-height: 1.6; white-space: pre-line; }
-
-        .order-btn {
-            background-color: #666; 
-            color: white; 
+        .header-brand {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            padding: 18px; 
-            border-radius: 50px; 
-            text-decoration: none;
-            font-weight: bold; 
-            display: block; 
-            font-size: 1.2rem; 
-            text-transform: uppercase;
-            margin-bottom: 40px;
+            pointer-events: none;
         }
 
-        .no-result { grid-column: 1 / -1; text-align: center; padding: 40px; color: #666; font-size: 1.1rem; }
+        .brand-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--dark-brown);
+            line-height: 1.1;
+            display: block;
+        }
+
+        .brand-location {
+            font-size: 0.625rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            color: var(--light-brown);
+            margin-top: 0.25rem;
+            text-transform: uppercase;
+            display: block;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-desktop {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-desktop a {
+            text-decoration: none;
+            color: var(--dark-brown);
+            font-weight: 500;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-desktop a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--gold);
+            transition: var(--transition);
+        }
+
+        .nav-desktop a:hover {
+            color: var(--medium-brown);
+        }
+
+        .nav-desktop a:hover::after {
+            width: 100%;
+        }
+
+        .nav-desktop .nav-icon {
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .nav-desktop .nav-icon:hover {
+            color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        /* --- MOBILE MENU --- */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 22px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            display: block;
+            height: 2px;
+            width: 100%;
+            background-color: var(--dark-brown);
+            transition: var(--transition);
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .nav-mobile {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: 100%;
+            height: 0;
+            background-color: var(--dark-brown);
+            overflow: hidden;
+            transition: var(--transition);
+            z-index: 999;
+        }
+
+        .nav-mobile.active {
+            height: calc(100vh - var(--header-height));
+        }
+
+        .nav-mobile-content {
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+        }
+
+        .nav-mobile a {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem 0;
+            text-decoration: none;
+            color: var(--cream);
+            font-size: 1.125rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid rgba(245, 241, 232, 0.1);
+            transition: var(--transition);
+        }
+
+        .nav-mobile a i {
+            margin-right: 1.25rem;
+            font-size: 1.25rem;
+            width: 30px;
+        }
+
+        .nav-mobile a:hover {
+            color: var(--gold);
+            padding-left: 1rem;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 600px;
+            margin-top: var(--header-height);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(44, 24, 16, 0.7) 0%,
+                rgba(44, 24, 16, 0.4) 50%,
+                rgba(44, 24, 16, 0.6) 100%
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: left;
+            max-width: 1400px;
+            width: 100%;
+            padding: 0 clamp(1.25rem, 5vw, 5rem);
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            color: var(--white);
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            line-height: 1.1;
+        }
+
+        .hero p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        /* --- SECTION HEADERS --- */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .section-subtitle {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .section-dark .section-subtitle {
+            color: var(--gold);
+        }
+
+        .section-header h2 {
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.125rem;
+        }
+
+        .divider {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 2rem auto;
+        }
+
+        /* --- OUR COFFEE SECTION --- */
+        .coffee-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .coffee-image-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 5;
+            overflow: hidden;
+            border-radius: 2px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .coffee-image-wrapper::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--gold);
+            z-index: -1;
+        }
+
+        .coffee-carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .coffee-carousel img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .coffee-carousel img.active {
+            opacity: 1;
+        }
+
+        .coffee-content h3 {
+            font-size: 1.75rem;
+            margin: 2rem 0 1rem;
+            color: var(--dark-brown);
+        }
+
+        .coffee-content h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .coffee-tagline {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--medium-brown);
+            margin-bottom: 3rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+        }
+
+        /* --- MENU SECTION --- */
+        .menu-showcase {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 5rem;
+        }
+
+        .menu-showcase-item {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+            border-radius: 2px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-showcase-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-slow);
+        }
+
+        .menu-showcase-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .menu-showcase-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.4), transparent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .menu-showcase-item:hover::after {
+            opacity: 1;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5rem;
+            margin-bottom: 4rem;
+        }
+
+        .menu-category h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(245, 241, 232, 0.15);
+            color: var(--cream);
+        }
+
+        .menu-list {
+            list-style: none;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(245, 241, 232, 0.08);
+            transition: var(--transition);
+        }
+
+        .menu-item:hover {
+            padding-left: 0.5rem;
+            border-bottom-color: var(--gold);
+        }
+
+        .menu-item-name {
+            font-size: 1rem;
+            color: rgba(245, 241, 232, 0.9);
+            flex: 1;
+        }
+
+        .menu-item-price {
+            font-weight: 600;
+            color: var(--gold);
+            font-size: 1rem;
+            margin-left: 1rem;
+        }
+
+        .menu-cta {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        /* --- LOCATIONS SECTION --- */
+        .locations-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 5rem;
+        }
+
+        .location-card {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            background-color: rgba(245, 241, 232, 0.03);
+            border: 1px solid rgba(245, 241, 232, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .location-card.reverse {
+            grid-template-columns: 1fr 1.2fr;
+        }
+
+        .location-info {
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .location-info h3 {
+            font-size: 2.25rem;
+            margin-bottom: 2rem;
+            color: var(--cream);
+        }
+
+        .location-details {
+            margin-bottom: 2.5rem;
+        }
+
+        .location-detail {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.25rem;
+            color: rgba(245, 241, 232, 0.85);
+            font-size: 1rem;
+        }
+
+        .location-detail i {
+            width: 30px;
+            margin-right: 1rem;
+            color: var(--gold);
+            font-size: 1.125rem;
+            margin-top: 0.125rem;
+        }
+
+        .location-map {
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .location-map iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            filter: grayscale(100%) invert(92%) contrast(85%);
+            transition: var(--transition-slow);
+        }
+
+        .location-map:hover iframe {
+            filter: grayscale(0%) invert(0%);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--dark-brown);
+            color: var(--cream);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid rgba(245, 241, 232, 0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--cream);
+        }
+
+        .footer-brand p {
+            color: rgba(245, 241, 232, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1.25rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border: 2px solid rgba(245, 241, 232, 0.2);
+            border-radius: 50%;
+            color: var(--cream);
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--gold);
+            border-color: var(--gold);
+            color: var(--dark-brown);
+            transform: translateY(-3px);
+        }
+
+        .footer-links h4 {
+            font-size: 1.125rem;
+            margin-bottom: 1.5rem;
+            color: var(--cream);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links a {
+            display: block;
+            color: rgba(245, 241, 232, 0.7);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+            padding-left: 0.5rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(245, 241, 232, 0.1);
+            color: rgba(245, 241, 232, 0.6);
+            font-size: 0.875rem;
+        }
+
+        /* --- ANIMATIONS --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .slide-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1024px) {
+            :root {
+                --header-height: 80px;
+            }
+
+            .nav-desktop {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .coffee-grid,
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .coffee-image-wrapper {
+                aspect-ratio: 16 / 10;
+                order: -1;
+            }
+
+            .coffee-image-wrapper::after {
+                display: none;
+            }
+
+            .menu-showcase {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .location-card,
+            .location-card.reverse {
+                grid-template-columns: 1fr;
+            }
+
+            .location-info {
+                padding: 3rem 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+        }
+
+        /* DÜZƏLİŞ: Mobil animasiya məsafəsi azaldıldı */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 500px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn {
+                padding: 0.875rem 2rem;
+                font-size: 0.75rem;
+            }
+
+            .section {
+                padding: 4rem 0;
+            }
+
+            .section-header {
+                margin-bottom: 3rem;
+            }
+
+            .menu-showcase {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .location-map {
+                min-height: 300px;
+            }
+
+            /* YENİ: Animasiyanı yumşaltmaq üçün */
+            .slide-right {
+                transform: translateX(20px);
+            }
+            .slide-left {
+                transform: translateX(-20px);
+            }
+        }
+
+        /* --- LOADING ANIMATION --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            animation: fadeInUp 1s ease-out forwards;
+        }
     </style>
 </head>
 <body>
+    <header id="header">
+        <div class="header-container">
+            <a href="#" class="header-logo">
+                <img src="https://i.ibb.co/YTPvrrg8/quality-restoration-20260214015716876.jpg" alt="Mast Coffee Logo">
+            </a>
 
-    <header>
-        <div class="header-logo">
-            <img src="https://i.ibb.co/3yZW23jr/file-00000000175c722fb281a93f97e3f54f.png" alt="Logo">
-        </div>
-        <div class="header-title">BIKE.SHOP.AZ</div>
-        <div class="menu-icon" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
-    </header>
+            <nav class="nav-desktop">
+                <a href="#our-coffee">Our Coffee</a>
+                <a href="#menu">Menu</a>
+            </nav>
 
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="Məhsul axtar...">
-    </div>
+            <div class="header-brand">
+                <span class="brand-name">MAST COFFEE</span>
+                <span class="brand-location">Toronto</span>
+            </div>
 
-    <nav id="main-menu">
-        <a href="#" class="menu-item" onclick="showPage('home')"><i class="fas fa-home"></i> Əsas səhifə</a>
-        <a href="https://wa.me/994552345510" class="menu-item"><i class="fab fa-whatsapp"></i> Əlaqə saxla</a>
-        <a href="#" class="menu-item" onclick="showPage('wishlist')"><i class="fas fa-heart"></i> İstək siyahım</a>
-    </nav>
+            <nav class="nav-desktop">
+                <a href="#locations">Locations</a>
+                <a href="tel:+14163661496">Contact</a>
+                <a href="https://www.instagram.com/mastcoffeebar" target="_blank" class="nav-icon">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </nav>
 
-    <div class="product-grid" id="product-container"></div>
-
-    <div id="load-more-container" class="load-more-container">
-        <button class="load-more-btn" onclick="loadMore()">DAHA ÇOX GÖSTƏR</button>
-    </div>
-
-    <footer>
-        <div class="social-links">
-            <a href="https://www.instagram.com/bike.shop.az?igsh=Nm14MXJ0OW14MzFh" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://wa.me/994552345510" target="_blank"><i class="fab fa-whatsapp"></i></a>
-            <a href="mailto:bikeshopaz1@gmail.com"><i class="far fa-envelope"></i></a>
-        </div>
-        <div class="footer-text">© 2026 BIKE.SHOP.AZ - Bütün hüquqlar qorunur.</div>
-    </footer>
-
-    <div id="product-modal" class="modal">
-        <div class="modal-top-bar">
-            <div class="close-btn" onclick="closeModal()">&times;</div>
-            <div class="modal-logo">
-                <img src="https://i.ibb.co/3yZW23jr/file-00000000175c722fb281a93f97e3f54f.png" alt="Logo">
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
-        
-        <div class="slider-wrapper" id="swipe-area">
-            <div class="image-counter" id="img-counter">1 / 2</div>
-            <img id="modal-img" src="" class="modal-image">
-        </div>
+    </header>
 
-        <div class="modal-content">
-            <div id="modal-name" class="modal-name"></div>
-            <div id="modal-details" class="modal-details"></div>
-            <a id="modal-whatsapp-btn" href="#" class="order-btn">İNDİ SİFARİŞ ET</a>
+    <nav class="nav-mobile" id="navMobile">
+        <div class="nav-mobile-content">
+            <a href="#our-coffee"><i class="fas fa-mug-hot"></i> Our Coffee</a>
+            <a href="#menu"><i class="fas fa-book-open"></i> Menu</a>
+            <a href="#locations"><i class="fas fa-map-marker-alt"></i> Locations</a>
+            <a href="tel:+14163661496"><i class="fas fa-phone"></i> Contact Us</a>
+            <a href="https://www.instagram.com/mastcoffeebar" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
         </div>
-    </div>
+    </nav>
+
+    <section class="hero">
+        <img src="https://i.ibb.co/Fq4P1gfS/1771195011940.png" alt="Mast Coffee Hero" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="hero-content animate-on-load">
+            <h1>Freshly Brewed.<br>Locally Loved.</h1>
+            <p>Experience premium specialty coffee in the heart of Toronto. Ethically sourced, expertly crafted.</p>
+            <div class="hero-buttons">
+                <a href="#menu" class="btn btn-light">View Our Menu</a>
+                <a href="#locations" class="btn btn-outline-light">Visit Us</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="our-coffee">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-subtitle">Since 2017</span>
+                <h2>Our Coffee</h2>
+                <div class="divider"></div>
+                <p class="coffee-tagline">Keeping Toronto caffeinated with passion and precision</p>
+            </div>
+
+            <div class="coffee-grid">
+                <div class="coffee-image-wrapper slide-right">
+                    <div class="coffee-carousel" id="coffeeCarousel">
+                        <img src="https://i.ibb.co/VWfSCw4r/expansion-20260214051931062.jpg" alt="Coffee Image 1" class="active">
+                        <img src="https://i.ibb.co/4wY2RjwW/In-Shot-20260214-043153555.jpg" alt="Coffee Image 2">
+                        <img src="https://i.ibb.co/3m80jgzK/expansion-20260214033609772.jpg" alt="Coffee Image 3">
+                    </div>
+                </div>
+
+                <div class="coffee-content slide-left">
+                    <h3>49th Parallel Coffee</h3>
+                    <p>
+                        Based in Vancouver, British Columbia, 49th Parallel endeavours to sustainably source and craft exceptional coffee. 
+                        A technologically advanced roastery with a science-forward approach to the craft, they positively contribute to the 
+                        health of local and global ecosystems.
+                    </p>
+
+                    <h3>De Mello Coffee</h3>
+                    <p>
+                        De Mello Coffee is an award-winning roastery specializing in specialty coffee. Their team believes in sourcing the 
+                        best coffee from around the world and roasting them to perfection. Their passion is evident in everything they do, 
+                        from meticulous sourcing to artisanal roasting methods.
+                    </p>
+
+                    <a href="#menu" class="btn btn-primary">Taste the Difference</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-dark" id="menu">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-subtitle">Handcrafted Excellence</span>
+                <h2>Our Menu</h2>
+                <div class="divider"></div>
+            </div>
+
+            <div class="menu-showcase fade-in">
+                <div class="menu-showcase-item">
+                    <img src="https://i.ibb.co/MyJvqqyy/452c334b97b2b171b508b0a1799a4657.jpg" alt="Pastry 1">
+                </div>
+                <div class="menu-showcase-item">
+                    <img src="https://i.ibb.co/jKXyvVv/14d4d829714594cf50e1af4f1b7f3aa2.jpg" alt="Pastry 2">
+                </div>
+                <div class="menu-showcase-item">
+                    <img src="https://i.ibb.co/8nS71MNr/9eca1e0a0fb786ff62c39dc3912e10a8.jpg" alt="Pastry 3">
+                </div>
+                <div class="menu-showcase-item">
+                    <img src="https://i.ibb.co/B5ZgWk3B/fb5a7b4a04fe90e7ad03b98c79d6e836.jpg" alt="Pastry 4">
+                </div>
+            </div>
+
+            <div class="menu-grid fade-in">
+                <div class="menu-category">
+                    <h3>Espresso Bar</h3>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <span class="menu-item-name">Small Brewed Coffee</span>
+                            <span class="menu-item-price">$2.10</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Brewed Coffee</span>
+                            <span class="menu-item-price">$2.85</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Espresso</span>
+                            <span class="menu-item-price">$3.75</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Americano</span>
+                            <span class="menu-item-price">$3.95</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Macchiato</span>
+                            <span class="menu-item-price">$3.95</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Cortado</span>
+                            <span class="menu-item-price">$4.25</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Flat White</span>
+                            <span class="menu-item-price">$4.65</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Cappuccino</span>
+                            <span class="menu-item-price">$4.55</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Latte</span>
+                            <span class="menu-item-price">$4.95</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Vanilla Latte</span>
+                            <span class="menu-item-price">$5.24</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Mocha</span>
+                            <span class="menu-item-price">$5.35</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Misto</span>
+                            <span class="menu-item-price">$4.15</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu-category">
+                    <h3>Non-Coffee</h3>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <span class="menu-item-name">Chai Latte</span>
+                            <span class="menu-item-price">$4.95</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Matcha Latte</span>
+                            <span class="menu-item-price">$5.35</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">London Fog</span>
+                            <span class="menu-item-price">$4.95</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Hot Chocolate</span>
+                            <span class="menu-item-price">$4.75</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Tea</span>
+                            <span class="menu-item-price">$3.25</span>
+                        </li>
+                    </ul>
+
+                    <h3 style="margin-top: 3rem;">Iced Drinks</h3>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <span class="menu-item-name">Iced Americano</span>
+                            <span class="menu-item-price">$3.95</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Iced Latte</span>
+                            <span class="menu-item-price">$4.95</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Iced Mocha</span>
+                            <span class="menu-item-price">$5.25</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Iced Caramel Latte</span>
+                            <span class="menu-item-price">$5.45</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Iced Tea</span>
+                            <span class="menu-item-price">$3.50</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu-category">
+                    <h3>Bakery</h3>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <span class="menu-item-name">White Cheddar & Chive Scone</span>
+                            <span class="menu-item-price">$3.55</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Blueberry Scone</span>
+                            <span class="menu-item-price">$3.50</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Blueberry Muffin</span>
+                            <span class="menu-item-price">$3.25</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Vegan Banana Walnut Muffin</span>
+                            <span class="menu-item-price">$3.25</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Butter Croissant</span>
+                            <span class="menu-item-price">$3.55</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Almond Croissant</span>
+                            <span class="menu-item-price">$3.95</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Chocolate Croissant</span>
+                            <span class="menu-item-price">$3.95</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Vegan Pumpkin Loaf</span>
+                            <span class="menu-item-price">$3.85</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="menu-category">
+                    <h3>Sweet Treats</h3>
+                    <ul class="menu-list">
+                        <li class="menu-item">
+                            <span class="menu-item-name">Flourless Chocolate Brownie</span>
+                            <span class="menu-item-price">$3.55</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Carrot Cake</span>
+                            <span class="menu-item-price">$3.75</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Ginger Cookie</span>
+                            <span class="menu-item-price">$3.45</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Sea Salt Dark Chocolate Cookie</span>
+                            <span class="menu-item-price">$3.45</span>
+                        </li>
+                        <li class="menu-item">
+                            <span class="menu-item-name">Oatmeal</span>
+                            <span class="menu-item-price">$7.50</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="menu-cta fade-in">
+                <p style="margin-bottom: 2rem; font-size: 1.125rem;">Order ahead for pickup and skip the line</p>
+                <a href="tel:+14163661496" class="btn btn-light">Order Now</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-dark" id="locations">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-subtitle">Come Visit</span>
+                <h2>Our Locations</h2>
+                <div class="divider"></div>
+            </div>
+
+            <div class="locations-grid">
+                <div class="location-card slide-left">
+                    <div class="location-map">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2886.8!2d-79.377!3d43.655!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDPCsDM5JzE4LjAiTiA3OcKwMjInMzcuMiJX!5e0!3m2!1sen!2sca!4v1600000000000!5m2!1sen!2sca"
+                            allowfullscreen
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    <div class="location-info">
+                        <h3>Church & Shuter</h3>
+                        <div class="location-details">
+                            <div class="location-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>68 Shuter Street, Toronto, ON</span>
+                            </div>
+                            <div class="location-detail">
+                                <i class="fas fa-phone"></i>
+                                <span>416-366-1496</span>
+                            </div>
+                            <div class="location-detail">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <div>Monday - Friday: 7:00 AM - 6:00 PM</div>
+                                    <div>Saturday - Sunday: 8:00 AM - 6:00 PM</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="https://goo.gl/maps/placeholder" target="_blank" class="btn btn-outline-light">Get Directions</a>
+                    </div>
+                </div>
+
+                <div class="location-card reverse slide-right">
+                    <div class="location-info">
+                        <h3>King & Jarvis</h3>
+                        <div class="location-details">
+                            <div class="location-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>61 Jarvis Street, Toronto, ON</span>
+                            </div>
+                            <div class="location-detail">
+                                <i class="fas fa-phone"></i>
+                                <span>416-366-8891</span>
+                            </div>
+                            <div class="location-detail">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <div>Monday - Friday: 7:00 AM - 6:00 PM</div>
+                                    <div>Saturday - Sunday: 8:00 AM - 6:00 PM</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="https://goo.gl/maps/placeholder" target="_blank" class="btn btn-outline-light">Get Directions</a>
+                    </div>
+                    <div class="location-map">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2887!2d-79.373!3d43.651!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDPCsDM5JzAzLjYiTiA3OcKwMjInMjIuOCJX!5e0!3m2!1sen!2sca!4v1600000000000!5m2!1sen!2sca"
+                            allowfullscreen
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>MAST COFFEE</h3>
+                    <p>Ethically sourced. Expertly crafted. Proudly serving Toronto since 2017.</p>
+                    <div class="footer-social">
+                        <a href="https://www.instagram.com/mastcoffeebar" target="_blank" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.facebook.com/mastcoffeebar" target="_blank" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="tel:+14163661496" class="social-link">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#our-coffee">Our Coffee</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="#locations">Locations</a></li>
+                        <li><a href="tel:+14163661496">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Locations</h4>
+                    <ul>
+                        <li><a href="#locations">68 Shuter Street</a></li>
+                        <li><a href="#locations">61 Jarvis Street</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 Mast Coffee. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        const whatsappNumber = "994552345510";
-        let currentPage = 'home';
-        let wishlist = JSON.parse(localStorage.getItem('bikeShopWishlist')) || [];
-        let visibleCount = 6;
-        let currentFilteredProducts = [];
+        // MOBILE MENU TOGGLE
+        const menuToggle = document.getElementById('menuToggle');
+        const navMobile = document.getElementById('navMobile');
+        const navLinks = document.querySelectorAll('.nav-mobile a');
 
-        const products = [
-            { 
-                id: 108, 
-                name: "Shimano Deore CS-M5100 Kaset", 
-                price: 139.00, 
-                images: ["https://i.ibb.co/GfrSz5Dj/Screenshot-20260212-013025-Instagram.jpg"], 
-                details: "Made in Japan 🇯🇵\nBrend: Shimano\nModel: CS-M5100 (Deore seriyası)\nSürət sayı: 11 Sürət (1x11 və ya 2x11)\nMaterial: Paslanmaz Polad (Nickel plated)\nBaraban növü: Standart Shimano HG\nDiş ardıcıllığı: 11-13-15-18-21-24-28-33-39-45-51T\nÇəki: ~622 qram\nÇatdırılma var ✅" 
-            },
-            { 
-                id: 107, 
-                name: "GHOST Seatpost", 
-                price: 25.00, 
-                images: ["https://i.ibb.co/JwK7bfg2/Screenshot-20260212-012423-Instagram.jpg", "https://i.ibb.co/zTJrkNh7/Screenshot-20260212-012417-Instagram.jpg"], 
-                details: "Made in Almaniya 🇩🇪\nMarka: Ghost\nUzunluq: 400mm\nDiametr: 31.6mm\nMaterial: Aluminum\nÇatdırılma var ✅" 
-            },
-            { 
-                id: 106, 
-                name: "GHOST GND 51 Sükan", 
-                price: 39.00, 
-                images: ["https://i.ibb.co/dwGkZwgD/Screenshot-20260212-005109-Instagram.jpg", "https://i.ibb.co/7D6D70r/Screenshot-20260212-005009-Instagram.jpg"], 
-                details: "Made in Almaniya 🇩🇪\nMarka: Ghost\nModel: GND 51\nMaterial: 6061 Alüminium\nUzunluq: 780mm\nRise: 15mm\nBacksweep: 8°\nUpsweep: 5°\nDiametr: 31.8mm\nÇəki: 299q\nÇatdırılma var ✅" 
-            },
-            { 
-                id: 105, 
-                name: "Brigadier VZR MTB Helmet", 
-                price: 39.00, 
-                images: ["https://i.ibb.co/fzrCt8hJ/Screenshot-20260212-003526-Instagram.jpg", "https://i.ibb.co/Q7sJwg4t/Screenshot-20260212-003637-Instagram.jpg"], 
-                details: "Marka: Brigadier\nModel: VZR\nNöv: Trail, XC, Street, Urban\nÖlçü: M - L\nRəng: Qara, Yaşıl\nQiymət: Endirimlə 39 AZN\nÇatdırılma var" 
-            },
-            { 
-                id: 104, 
-                name: "Reverse Components Saddle", 
-                price: 49.00, 
-                images: ["https://i.ibb.co/9mwB4wRn/Screenshot-20260212-002225-Wink.jpg", "https://i.ibb.co/XfWT9Yd1/quality-restoration-20260212002033230.jpg"], 
-                details: "Marka: Reverse Components\nMTB Yəhər\nÇəkisi: 238q\nÖlçü: 275×130mm\nRəng: Qara və qırmızı\nÇatdırılma var" 
-            },
-            { 
-                id: 103, 
-                name: "Cube Flat Pedal", 
-                price: 99.00, 
-                images: ["https://i.ibb.co/7dmyVg1m/Screenshot-20260211-231200-Instagram.jpg", "https://i.ibb.co/C5K74QKq/Screenshot-20260211-231243-Instagram.jpg"], 
-                details: "Made in Almaniya\nMarka: Cube\nMaterial: Aluminum\nÇəkisi: 366g\nRəng: Açıq yaşıl\nÖlçüsü: 105x95x17mm\nMəhdud saydadır\nÇatdırılma var" 
-            },
-            { 
-                id: 102, 
-                name: "Fullface Dəbilqə", 
-                price: 139.00, 
-                images: ["https://i.ibb.co/NPcQ5v3/Screenshot-20260211-225632-Instagram.jpg", "https://i.ibb.co/KpXd8x7v/Screenshot-20260211-225621-Instagram.jpg"], 
-                details: "Çəki: 1420q\nRəng: Qara yaşıl\nÖlçü: M,L\nÇox az işlənib\nBrend maldır, çox keyfiyyətlidir.\nÇatdırılma var." 
-            },
-            { 
-                id: 101, 
-                name: "Velosiped Tutacağı (Grip)", 
-                price: 10.00, 
-                images: ["https://i.ibb.co/bRKRFsvg/Screenshot-20260211-213641-Instagram.jpg", "https://i.ibb.co/WWtczntK/Screenshot-20260211-213629-Instagram.jpg"], 
-                details: "Made in China\n135mm\nÇatdırılma var\nQırmızı və Bənövşəyi rəngi mövcuddur" 
-            }
-        ];
-
-        function renderProducts(list, append = false) {
-            const container = document.getElementById('product-container');
-            const loadMoreBtn = document.getElementById('load-more-container');
-            if (!append) container.innerHTML = "";
-            currentFilteredProducts = list;
-            const itemsToShow = list.slice(0, visibleCount);
-            container.innerHTML = ""; 
-            if (itemsToShow.length === 0) {
-                container.innerHTML = "<div class='no-result'>Məhsul tapılmadı.</div>";
-                loadMoreBtn.style.display = 'none';
-                return;
-            }
-            itemsToShow.forEach(p => {
-                const isLiked = wishlist.includes(p.id);
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    <div class="image-container" onclick="openModal(${p.id})">
-                        <img src="${p.images[0]}" class="product-image">
-                    </div>
-                    <div class="card-info-row">
-                        <span class="grid-price">${p.price.toFixed(2)} AZN</span>
-                        <i class="${isLiked ? 'fas active' : 'far'} fa-heart heart-icon" data-id="${p.id}"></i>
-                    </div>
-                `;
-                card.querySelector('.heart-icon').addEventListener('click', (e) => toggleHeart(e, p.id));
-                container.appendChild(card);
-            });
-            loadMoreBtn.style.display = (visibleCount < list.length) ? 'block' : 'none';
-        }
-
-        function loadMore() {
-            visibleCount += 6;
-            renderProducts(currentFilteredProducts);
-        }
-
-        function toggleHeart(e, id) {
-            e.stopPropagation();
-            const idx = wishlist.indexOf(id);
-            if (idx > -1) wishlist.splice(idx, 1);
-            else wishlist.push(id);
-            localStorage.setItem('bikeShopWishlist', JSON.stringify(wishlist));
-            if (currentPage === 'wishlist') showPage('wishlist');
-            else {
-                e.target.classList.toggle('fas');
-                e.target.classList.toggle('far');
-                e.target.classList.toggle('active');
-            }
-        }
-
-        function showPage(page) {
-            currentPage = page;
-            visibleCount = 6;
-            document.getElementById('main-menu').style.display = 'none';
-            document.getElementById('searchInput').value = "";
-            if (page === 'home') renderProducts(products);
-            else renderProducts(products.filter(p => wishlist.includes(p.id)));
-        }
-
-        function toggleMenu() {
-            const menu = document.getElementById('main-menu');
-            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-        }
-
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const text = e.target.value.toLowerCase();
-            visibleCount = 6;
-            const filtered = products.filter(p => p.name.toLowerCase().includes(text));
-            renderProducts(filtered);
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navMobile.classList.toggle('active');
         });
 
-        let currentProduct = null, currentImageIndex = 0;
-        function openModal(id) {
-            currentProduct = products.find(x => x.id === id);
-            currentImageIndex = 0;
-            updateSlider();
-            document.getElementById('modal-name').innerText = currentProduct.name;
-            document.getElementById('modal-details').innerText = currentProduct.details;
-            const msg = `Salam! ${currentProduct.name} sifariş etmək istəyirəm.`;
-            document.getElementById('modal-whatsapp-btn').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
-            const modal = document.getElementById('product-modal');
-            modal.style.display = 'flex';
-            modal.scrollTop = 0;
-        }
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navMobile.classList.remove('active');
+            });
+        });
 
-        function updateSlider() {
-            document.getElementById('modal-img').src = currentProduct.images[currentImageIndex];
-            document.getElementById('img-counter').innerText = `${currentImageIndex + 1} / ${currentProduct.images.length}`;
-            document.getElementById('img-counter').style.display = currentProduct.images.length > 1 ? 'block' : 'none';
-        }
+        // HEADER SCROLL EFFECT
+        const header = document.getElementById('header');
+        let lastScroll = 0;
 
-        function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
-
-        let touchStartX = 0;
-        const swipeArea = document.getElementById('swipe-area');
-        swipeArea.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive: true});
-        swipeArea.addEventListener('touchend', e => {
-            const touchEndX = e.changedTouches[0].screenX;
-            if (touchEndX < touchStartX - 50) { 
-                currentImageIndex = (currentImageIndex + 1) % currentProduct.images.length;
-                updateSlider();
-            } else if (touchEndX > touchStartX + 50) { 
-                currentImageIndex = (currentImageIndex - 1 + currentProduct.images.length) % currentProduct.images.length;
-                updateSlider();
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
             }
-        }, {passive: true});
+            
+            lastScroll = currentScroll;
+        });
 
-        window.onclick = e => { if (e.target == document.getElementById('product-modal')) closeModal(); }
+        // COFFEE CAROUSEL
+        const carouselImages = document.querySelectorAll('#coffeeCarousel img');
+        let currentIndex = 0;
 
-        renderProducts(products);
+        function rotateCarousel() {
+            carouselImages[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % carouselImages.length;
+            carouselImages[currentIndex].classList.add('active');
+        }
+
+        setInterval(rotateCarousel, 4000);
+
+        // INTERSECTION OBSERVER FOR ANIMATIONS
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with animation classes
+        document.querySelectorAll('.fade-in, .slide-left, .slide-right').forEach(el => {
+            observer.observe(el);
+        });
+
+        // SMOOTH SCROLL
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 90;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>
